@@ -1,10 +1,10 @@
-# GroundStation
+# CanSat GroundStation
 
 A CanSat Ground station 
 
+### FIRST LOOK
 
-### Instalation
-
+### INSTALATION
 ```bash
 pip install -r requirements.txt 
 ```
@@ -20,7 +20,8 @@ Pin connection of the TTL adapter and the RYLR998 module:
 |     GND    |   GND   |
 |     3V3    |   VDD   |
 
-### HOW IT WORKS
+### HOW TO USE IT
+
 
 
 

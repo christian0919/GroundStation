@@ -1,9 +1,9 @@
 {
-    "LoRa_ADDRESS": 3982,
-    "LoRa_NETWORKID": 9,
-    "LoRa_BAND": 915000000,
-    "LoRa_SPREADING_FACTOR": false,
-    "LoRa_BANDWIDTH": false,
-    "LoRa_CODING_RATE": false,
-    "LoRa_PROGRAMMED_PREAMBLE": false
+    "LoRa_ADDRESS": 1,
+    "LoRa_NETWORKID": 1,
+    "LoRa_BAND": 1,
+    "LoRa_SPREADING_FACTOR": 1,
+    "LoRa_BANDWIDTH": 1,
+    "LoRa_CODING_RATE": 1,
+    "LoRa_PROGRAMMED_PREAMBLE": 1
 }

@@ -1,2 +1,3 @@
 VENV/
 src/try.py
+src/__pycache__/

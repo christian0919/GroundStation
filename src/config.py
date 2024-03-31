@@ -11,9 +11,9 @@ class config:
         self.__LoRa_PROGRAMMED_PREAMBLE = 0
         self.__path = "config.json"
 
-        self.__UpdateValues()
+        self.UpdateValues()
 
-    def __UpdateValues(self):
+    def UpdateValues(self):
 
         try:
             with open(self.__path, 'r') as archivo:
@@ -48,7 +48,7 @@ class config:
             #Write in file
             with open(self.__path, 'w') as archivo:
                 json.dump(data, archivo, indent=4)
-            self.__UpdateValues()
+            self.UpdateValues()
         except FileNotFoundError:
             print(f"El archivo {self.__path} no se encontró.")
         except json.JSONDecodeError:

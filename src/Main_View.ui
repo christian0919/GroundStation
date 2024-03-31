@@ -273,12 +273,12 @@
    </property>
    <property name="font">
     <font>
-     <family>FiraCode Nerd Font Mono</family>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Record</string>
+    <string>Record </string>
    </property>
   </widget>
   <widget class="QPushButton" name="buttonPorts">

@@ -34,14 +34,21 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Velocidad = self.Graph_Velocidad.plot(pen=lineGraphicsColor)
         self.Graph_Humedad = self.Graph_Humedad.plot(pen=lineGraphicsColor)
 
- 
+        self.Record_button.clicked.connect(self.StartMission)
         self.buttonPorts.clicked.connect(self.UpdatePortsList)
  
-        self.timer = pg.QtCore.QTimer()
-        self.timer.timeout.connect(self.RandomData)
-        self.timer.start(100)
 
-    def RandomData(self):
+    def StartMission(self):
+
+        if self.comboPorts.count() == 0:        
+            self.timer = pg.QtCore.QTimer()
+            self.timer.timeout.connect(self.DummyMode)
+            self.timer.start(100)
+        else:
+            print("El ComboBox no está vacío.")
+
+
+    def DummyMode(self):
         rnAltitud = np.random.uniform(0, 500)
         #print("rnAltitud:", rnAltitud)
         self.y_Altitud.append(rnAltitud)

@@ -79,6 +79,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -97,6 +98,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -136,6 +138,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -154,6 +157,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -172,6 +176,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -190,6 +195,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -208,6 +214,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Hack Nerd Font</family>
      <pointsize>12</pointsize>
     </font>
    </property>
@@ -215,7 +222,7 @@
     <string>Temperatura Interna</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="comboPorts">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -230,28 +237,26 @@
      <pointsize>9</pointsize>
     </font>
    </property>
-   <item>
-    <property name="text">
-     <string>/dev/ttyUSB0</string>
-    </property>
-   </item>
   </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>410</y>
-     <width>101</width>
+     <x>10</x>
+     <y>420</y>
+     <width>151</width>
      <height>21</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <family>Hack Nerd Font Mono</family>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>Puerto COM</string>
+    <string>Puertos Seriales</string>
    </property>
   </widget>
   <widget class="QPushButton" name="Record_button">
@@ -274,6 +279,25 @@
    </property>
    <property name="text">
     <string>Record</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buttonPorts">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>440</y>
+     <width>31</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Hack Nerd Font</family>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string></string>
    </property>
   </widget>
  </widget>

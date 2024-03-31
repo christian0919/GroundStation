@@ -4,6 +4,9 @@ import pyqtgraph as pg
 import numpy as np
 import time
 import serial.tools.list_ports
+from configView import configView
+
+
 
 uiclass, baseclass = pg.Qt.loadUiType("Main_View.ui")
 
@@ -34,9 +37,13 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Velocidad = self.Graph_Velocidad.plot(pen=lineGraphicsColor)
         self.Graph_Humedad = self.Graph_Humedad.plot(pen=lineGraphicsColor)
 
+        self.Record_button.setText("Start ")
+
+
         self.Record_button.clicked.connect(self.StartMission)
-        self.Record_button.setText("Start")
         self.buttonPorts.clicked.connect(self.UpdatePortsList)
+        self.button_Config.clicked.connect(self.Show_Config)
+
         
         self.timer = pg.QtCore.QTimer()
 
@@ -47,14 +54,14 @@ class MainWindow(uiclass, baseclass):
                self.timer.timeout.connect(self.DummyMode)
                self.timer.start(100)
                self.missionStatus = not self.missionStatus
-               self.Record_button.setText("Stop")
+               self.Record_button.setText("Stop ")
                print("Demo")
            else:
                self.missionStatus = not self.missionStatus
                print("El ComboBox no está vacío.")
-               self.Record_button.setText("Stop")
+               self.Record_button.setText("Stop ")
         else :
-            self.Record_button.setText("Start")
+            self.Record_button.setText("Start ")
             self.missionStatus = not self.missionStatus
             self.timer.stop()  
             print("stop")
@@ -97,6 +104,11 @@ class MainWindow(uiclass, baseclass):
         for puerto in puertos:
             self.comboPorts.addItem(puerto.device)
 
+    def Show_Config(self):
+        configutarionView = configView()
+        configutarionView.ui.show()  
+        configutarionView.exec()
+        
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()

@@ -1,11 +1,14 @@
 import sys
 import csv
 from datetime import datetime
+import os
+
 class save:
     def __init__(self):
         self.data = []
         self.__path = ""
 #        fecha_hora_formateada = fecha_hora_actual.strftime("%Y-%m-%d_%H-%M-%S")
+        self.__createDirectory()
 
     def saveData(self):
         with open(self.__path , "a", newline="") as archivo_csv:
@@ -25,3 +28,9 @@ class save:
 
     def getPath(self):
         return self.__path
+    
+    def __createDirectory(self):
+        dir = "Missions/"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+ 

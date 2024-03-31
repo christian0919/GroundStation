@@ -1,5 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
+from communication import communication
 import pyqtgraph as pg
 import numpy as np
 import time
@@ -15,6 +16,7 @@ class MainWindow(uiclass, baseclass):
         super().__init__()
         self.setupUi(self)
         self.missionStatus = False
+        self.com = communication()
         #Graphics axes
         self.x = []
         self.y_hum = []
@@ -57,39 +59,59 @@ class MainWindow(uiclass, baseclass):
                self.Record_button.setText("Stop ")
                print("Demo")
            else:
-               self.missionStatus = not self.missionStatus
-               print("El ComboBox no está vacío.")
-               self.Record_button.setText("Stop ")
+                self.Record_button.setText("Stop ")
+                ### prepare module
+                self.com = communication()
+                self.com.Set_Serial_Port(self.comboPorts.currentText())
+                self.com.InitializeLora()
+                ### start real mode
+                self.timer.timeout.connect(self.RealMode)
+                self.timer.start(100)
+                self.missionStatus = not self.missionStatus
+
         else :
             self.Record_button.setText("Start ")
             self.missionStatus = not self.missionStatus
             self.timer.stop()  
             print("stop")
 
+    def RealMode(self):
+        data = self.com.Get_Cansat_Data()
+        if data != "" :
+            splited = data.split(":")
+            rnAltitud = int(splited[0])
+            rnTemperatureI = int(splited[1])
+            rnTemperatureE = int(splited[2])
+            rnHum = int(splited[3])
+            rnVelocidad = int(splited[4])
+            self.UpdateGraphics(rnAltitud,rnTemperatureI ,rnTemperatureE ,rnHum , rnVelocidad)
+
 
     def DummyMode(self):
         rnAltitud = np.random.uniform(0, 500)
-        #print("rnAltitud:", rnAltitud)
-        self.y_Altitud.append(rnAltitud)
+        rnTemperatureI = np.random.uniform(15, 30)
+        rnTemperatureE = np.random.uniform(15, 30)
+        rnHum = np.random.uniform(15, 30)
+        rnVelocidad = np.random.uniform(0, 100)
+        self.UpdateGraphics(rnAltitud,rnTemperatureI ,rnTemperatureE ,rnHum , rnVelocidad)
+
+    def UpdateGraphics(self, rnAltitud,rnTemperatureI ,rnTemperatureE ,rnHum , rnVelocidad):
+
+
         self.x.append(len(self.x))
+        
+        self.y_Altitud.append(rnAltitud)
         self.Graph_Altitud.setData(self.x, self.y_Altitud)
 
-        rnTemperatureI = np.random.uniform(15, 30)
-        #print("rnTemperatureI:", rnTemperatureI)
         self.y_InternTemp.append(rnTemperatureI)
         self.Graph_TemperaturaInterna.setData(self.x , self.y_InternTemp)
 
-        rnTemperatureE = np.random.uniform(15, 30)
-        #print("rnTemperatureE:", rnTemperatureE)
         self.y_ExTemp.append(rnTemperatureE)
         self.Graph_Temperatura_Externa.setData(self.x , self.y_ExTemp)
         
-        rnHum = np.random.uniform(15, 30)
         self.y_hum.append(rnHum)
         self.Graph_Humedad.setData(self.x , self.y_hum)
-        
-        rnVelocidad = np.random.uniform(0, 100)
-        #print("rnVelocidad:", rnVelocidad)
+
         self.y_vel.append(rnVelocidad)
         self.Graph_Velocidad.setData(self.x , self.y_vel)
 

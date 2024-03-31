@@ -11,7 +11,7 @@ class MainWindow(uiclass, baseclass):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
+        self.missionStatus = False
         #Graphics axes
         self.x = []
         self.y_hum = []
@@ -35,17 +35,29 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Humedad = self.Graph_Humedad.plot(pen=lineGraphicsColor)
 
         self.Record_button.clicked.connect(self.StartMission)
+        self.Record_button.setText("Start")
         self.buttonPorts.clicked.connect(self.UpdatePortsList)
- 
+        
+        self.timer = pg.QtCore.QTimer()
+
 
     def StartMission(self):
-
-        if self.comboPorts.count() == 0:        
-            self.timer = pg.QtCore.QTimer()
-            self.timer.timeout.connect(self.DummyMode)
-            self.timer.start(100)
-        else:
-            print("El ComboBox no está vacío.")
+        if not self.missionStatus:
+           if self.comboPorts.count() == 0:        
+               self.timer.timeout.connect(self.DummyMode)
+               self.timer.start(100)
+               self.missionStatus = not self.missionStatus
+               self.Record_button.setText("Stop")
+               print("Demo")
+           else:
+               self.missionStatus = not self.missionStatus
+               print("El ComboBox no está vacío.")
+               self.Record_button.setText("Stop")
+        else :
+            self.Record_button.setText("Start")
+            self.missionStatus = not self.missionStatus
+            self.timer.stop()  
+            print("stop")
 
 
     def DummyMode(self):

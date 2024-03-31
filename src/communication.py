@@ -5,7 +5,7 @@ from config import config
 
 class communication:
     def __init__(self):
-        self.serial_port = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+        self.serial_port =""
         self.configuration = config()
 
     def Send_AT_Command(self,command):
@@ -17,10 +17,14 @@ class communication:
     def Get_Cansat_Data(self):
         data = self.serial_port.readline().decode().strip()
         if(data != "" or data !=''):
-            print("Datos recibidos:", data)
-            return data
+            #print("Datos recibidos:", data)
+            filtered = data.split("|")
+            return str(filtered[1])
         return ""
-    
+
+    def Set_Serial_Port(self,port):
+        self.serial_port = serial.Serial(port, 115200, timeout=1)
+
     def InitializeLora(self):
         self.configuration.UpdateValues()
         self.Send_AT_Command("AT")
@@ -33,5 +37,5 @@ class communication:
                             str(self.configuration.get_LoRa_BANDWIDTH()) + "," +
                             str(self.configuration.get_LoRa_CODING_RATE()) + "," +
                             str(self.configuration.get_LoRa_PROGRAMMED_PREAMBLE()))
-                     
+        print("LoRa initialized")
         

@@ -8,7 +8,7 @@ class configView(QDialog):
 
         # Cargar el archivo UI
         loader = QUiLoader()
-        ui_file = QFile("Config_View.ui")
+        ui_file = QFile("Views/Config_View.ui")
         ui_file.open(QFile.ReadOnly)
         self.ui = loader.load(ui_file)
         ui_file.close()

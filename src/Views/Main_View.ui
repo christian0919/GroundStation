@@ -288,7 +288,7 @@
             </font>
            </property>
            <property name="text">
-            <string></string>
+            <string></string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -325,7 +325,7 @@
             </font>
            </property>
            <property name="text">
-            <string>15 min</string>
+            <string>00:00:00.000</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

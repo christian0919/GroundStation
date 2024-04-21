@@ -9,7 +9,7 @@ import serial.tools.list_ports
 from configView import configView
 from save import save
 from cylinder import CylinderWidget
-
+from timer import TimeManager
 uiclass, baseclass = pg.Qt.loadUiType("Views/Main_View.ui")
 
 class MainWindow(uiclass, baseclass):
@@ -18,8 +18,11 @@ class MainWindow(uiclass, baseclass):
         self.setupUi(self)
         self.missionStatus = False
         #Times
+        self.timeUpdater = TimeManager()
         self.timer = pg.QtCore.QTimer()
         self.clock = pg.QtCore.QTimer()
+
+
         #Communication object
         self.com = communication()
         #Graphics axes
@@ -35,8 +38,11 @@ class MainWindow(uiclass, baseclass):
         #Labels Graphics
  
         
-    def Time(self):
-        print("Hola")
+    def chronometer(self):
+        self.timeUpdater.update_time()
+        hours, minutes, seconds, milliseconds = self.timeUpdater.get_time()
+        time_str = "{:02d}:{:02d}:{:02d}:{:03d}".format(hours, minutes, seconds, milliseconds)
+        self.time_label.setText(time_str)
 
     def SaveMission(self):
         self.saveData = save()
@@ -56,11 +62,10 @@ class MainWindow(uiclass, baseclass):
         if not self.missionStatus:
            #identifica si hay puestos seriales conectados
            if self.comboPorts.count() == 0:        
-                self.clock.timeout.connect(self.Time)
-                #self.timclocker.start(1000)
-
                 self.timer.timeout.connect(self.DummyMode)
                 self.timer.start(100)
+                #self.clock.timeout.connect(self.chronometer)
+                #self.clock.start(10)
                 self.missionStatus = not self.missionStatus
                 self.Record_button.setText("Stop ")
                 print("Demo")
@@ -74,12 +79,14 @@ class MainWindow(uiclass, baseclass):
                 ### start real mode
                 self.timer.timeout.connect(self.RealMode)
                 self.timer.start(100)
+                self.chronometer()
                 self.missionStatus = not self.missionStatus
                 self.save_button.setEnabled(False)
         else :
+            self.timer.stop() 
+            #self.clock.stop()
             self.Record_button.setText("Start ")
             self.missionStatus = not self.missionStatus
-            self.timer.stop()  
             print("stop")
             self.save_button.setEnabled(True)
 
@@ -95,22 +102,15 @@ class MainWindow(uiclass, baseclass):
                                 self.com.get_giro_x()        ,self.com.get_giro_y()         ,self.com.get_giro_z(),
                                 self.com.get_battery()
                                 )
-            
-
 
     def DummyMode(self):
-        rnAltitud = np.random.uniform(0, 500)
-        rnTemperatureI = np.random.uniform(15, 30)
-        rnTemperatureE = np.random.uniform(15, 30)
-        rnHum = np.random.uniform(15, 30)
-        rnVelocidad = np.random.uniform(0, 100)
         self.UpdateGraphics(
                         np.random.uniform(0, 500)
                        ,np.random.uniform(15, 30),np.random.uniform(15, 30)
                        , np.random.uniform(0, 500) , np.random.uniform(0, 500)
                        , np.random.uniform(1027, 1030), np.random.uniform(1027, 1030)
                        , np.random.uniform(0, 15), np.random.uniform(0, 15) , np.random.uniform(0, 15)
-                       , np.random.uniform(0, 10), np.random.uniform(0, 10), np.random.uniform(0, 10) 
+                       , np.random.uniform(0, 30), np.random.uniform(0, 30), np.random.uniform(0, 30) 
                        , np.random.uniform(0,100)) 
 
     def UpdateGraphics(self, Altitud = 0
@@ -120,6 +120,8 @@ class MainWindow(uiclass, baseclass):
                        , Ax = 0, Ay = 0 , Az = 0
                        , Gx = 0, Gy = 0 , Gz = 0 
                        ,Battery = 0 ):
+        self.chronometer()
+
 
         self.x.append(len(self.x))
         
@@ -143,27 +145,29 @@ class MainWindow(uiclass, baseclass):
         self.Graph_GPS.addLegend()
         self.y_latitud.append(Lat)
         self.y_longitud.append(Long)   
-        self.Graph_GPS.plot(self.x , self.y_latitud, pen = self.BlueLines , name = 'Latitud')
-        self.Graph_GPS.plot(self.x , self.y_longitud, pen = self.OrangeLines , name = 'Longitud')
+        self.Graph_GPS.plot(self.x , self.y_latitud  , pen = self.BlueLines   , name = 'Latitud')
+        self.Graph_GPS.plot(self.x , self.y_longitud , pen = self.OrangeLines , name = 'Longitud')
 
         self.Graph_Giro.clear()
         self.Graph_Giro.addLegend()
         self.y_giro_x.append(Gx)
         self.y_giro_y.append(Gy) 
         self.y_giro_z.append(Gz)
-        self.Graph_Giro.plot(self.x , self.y_giro_x, pen = self.BlueLines , name = 'X')
-        self.Graph_Giro.plot(self.x , self.y_giro_y, pen = self.OrangeLines , name = 'Y')
-        self.Graph_Giro.plot(self.x , self.y_giro_z, pen = self.Greenlines , name = 'Z')
+        self.Graph_Giro.plot(self.x , self.y_giro_x , pen = self.BlueLines   , name = 'X')
+        self.Graph_Giro.plot(self.x , self.y_giro_y , pen = self.OrangeLines , name = 'Y')
+        self.Graph_Giro.plot(self.x , self.y_giro_z , pen = self.Greenlines  , name = 'Z')
 
         self.Graph_Aceleraciones.clear()
         self.Graph_Aceleraciones.addLegend()
         self.y_aceleration_x.append(Ax)
         self.y_aceleration_y.append(Ay) 
         self.y_aceleration_z.append(Az)
-        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_x, pen = self.BlueLines , name = 'X')
-        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_y, pen = self.OrangeLines , name = 'Y')
-        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_z, pen = self.Greenlines , name = 'Z')
+        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_x , pen = self.BlueLines   , name = 'X')
+        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_y , pen = self.OrangeLines , name = 'Y')
+        self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_z , pen = self.Greenlines  , name = 'Z')
 
+        self.cylinder_widget.update_orientation()
+        self.cylinder_widget.update_orientation(Gx,Gy,Gz)
 
         
 
@@ -229,9 +233,9 @@ class MainWindow(uiclass, baseclass):
         self.OrangeLines = (245, 106, 7)
         self.BlueLines = (51 , 175 , 255)
         self.Greenlines = (51 , 255 , 79)
-        #YellowLines = 
-        #PinkLines =
-        #PurpleLines =
+        #YellowLines = ()
+        #PinkLines = ()
+        #PurpleLines = ()
 
 
     def Add_Items(self):
@@ -247,6 +251,11 @@ class MainWindow(uiclass, baseclass):
         connfimr = True
         #connfirm = open view  get value
         if(connfimr):
+            #stop timers
+            self.timer.stop()
+            #self.clock.stop()
+            self.timeUpdater.initialize_Time()
+            self.chronometer()
             #clear axes data
             self.Graphics_Axes()
             self.UpdateGraphics(0,0,0,0,0)
@@ -263,8 +272,8 @@ class MainWindow(uiclass, baseclass):
             #change buttons, and stop mission
             if ( self.missionStatus):
                 self.missionStatus = False
+            self.time_label.setText(" 00:00:00.000 ")
             self.Record_button.setText("Start ")
-            self.timer.stop()
             self.Graphics_Axes() 
         #########################
 app = QApplication(sys.argv)

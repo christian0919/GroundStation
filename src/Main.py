@@ -213,7 +213,7 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Presion_Interna.setBackground(None)
         self.Graph_Presion_Externa.setBackground(None)
         self.Graph_GPS.setBackground(None)
-        self.Graph_Aceleraciones    .setBackground(None)
+        self.Graph_Aceleraciones.setBackground(None)
         
 
         #Lines
@@ -248,7 +248,15 @@ class MainWindow(uiclass, baseclass):
         if(connfimr):
             self.Graphics_Axes()
             self.UpdateGraphics(0,0,0,0,0)
+            self.Graph_Altitud.clear()
+            self.Graph_Temperatura_Interna.clear()
+            self.Graph_Temperatura_Externa.clear()
             self.Graph_GPS.clear()
+            self.Graph_Giro.clear()
+            self.Graph_Presion_Interna.clear()
+            self.Graph_Presion_Externa.clear()
+            self.Graph_GPS.clear()
+            self.Graph_Aceleraciones.clear()
             if ( self.missionStatus):
                 self.missionStatus = False
             self.Record_button.setText("Start ")

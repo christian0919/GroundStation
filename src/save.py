@@ -14,7 +14,12 @@ class save:
             writer = csv.writer(archivo_csv)
             # Si el archivo está vacío, escribir la cabecera
             if archivo_csv.tell() == 0:
-                writer.writerow(["Altitud", "TemperaturaI", "Giro","Humedad", "Velocidad"])
+                writer.writerow((["Altitud", 
+                                 "Presion_Interna", "Presion_Externa",
+                                 "Temperatura_Interna", "Temperatura_Externa",
+                                 "Latitud","Longitud",
+                                 "Giro_X","Giro_Y","Giro_Z",
+                                 "Aceleracion_X","Aceleracion_Y","Aceleracion_z"]))
 
             # Escribir los datos en el archivo CSV
             writer.writerows(self.data)

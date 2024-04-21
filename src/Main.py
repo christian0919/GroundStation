@@ -36,11 +36,17 @@ class MainWindow(uiclass, baseclass):
  
         
     def Time(self):
-        Print(Hola)
+        print("Hola")
 
     def SaveMission(self):
         self.saveData = save()
-        data = list(zip(self.y_latitud,self.y_Temperature_Intern, self.y_Temperature_Extern,self.y_presion_Interna,self.y_latitud))
+        data = list(zip(self.y_altitud,
+                        self.y_presion_Interna,self.y_presion_Externa,
+                        self.y_Temperature_Intern,self.y_Temperature_Extern,
+                        self.y_latitud , self.y_longitud ,
+                        self.y_giro_x ,self.y_giro_y ,self.y_giro_z,
+                        self.y_aceleration_x, self.y_aceleration_y, self.y_aceleration_z
+                        ))
         self.saveData.setPath()
         self.saveData.add_Data(data)
         self.saveData.save_Mission_Data()
@@ -80,13 +86,16 @@ class MainWindow(uiclass, baseclass):
     def RealMode(self):
         data = self.com.Get_Cansat_Data()
         if data != "" :
-            splited = data.split(":")
-            rnAltitud = int(splited[0])
-            rnTemperatureI = int(splited[1])
-            rnTemperatureE = int(splited[2])
-            #rnHum = int(splited[3])
-            rnVelocidad = int(splited[4])
-            #self.UpdateGraphics(rnAltitud,rnTemperatureI ,rnTemperatureE ,rnHum , rnVelocidad)
+            self.com.Split_Data(data)
+            self.UpdateGraphics(self.com.get_altitud()       , 
+                                self.com.get_Temperature_I() , self.com.get_Temperature_E() ,
+                                self.com.get_latitud()       ,self.com.get_longitud()       ,
+                                self.com.get_Presion_I()     , self.com.get_Presion_E()     ,
+                                self.com.get_aceleracion_x() ,self.com.get_aceleracion_y()  ,self.com.get_aceleracion_z(),
+                                self.com.get_giro_x()        ,self.com.get_giro_y()         ,self.com.get_giro_z(),
+                                self.com.get_battery()
+                                )
+            
 
 
     def DummyMode(self):
@@ -98,7 +107,7 @@ class MainWindow(uiclass, baseclass):
         self.UpdateGraphics(
                         np.random.uniform(0, 500)
                        ,np.random.uniform(15, 30),np.random.uniform(15, 30)
-                       , np.random.uniform(0, 500) , np.random.uniform(0, 500), np.random.uniform(0, 10)
+                       , np.random.uniform(0, 500) , np.random.uniform(0, 500)
                        , np.random.uniform(1027, 1030), np.random.uniform(1027, 1030)
                        , np.random.uniform(0, 15), np.random.uniform(0, 15) , np.random.uniform(0, 15)
                        , np.random.uniform(0, 10), np.random.uniform(0, 10), np.random.uniform(0, 10) 
@@ -106,7 +115,7 @@ class MainWindow(uiclass, baseclass):
 
     def UpdateGraphics(self, Altitud = 0
                        ,TemperatureInt = 0,TemperatureExt = 0 
-                       , Lat = 0 , Long  = 0, NoSat = 0
+                       , Lat = 0 , Long  = 0
                        , PressionInt = 0, PressionExt = 0
                        , Ax = 0, Ay = 0 , Az = 0
                        , Gx = 0, Gy = 0 , Gz = 0 
@@ -117,7 +126,7 @@ class MainWindow(uiclass, baseclass):
         self.y_altitud.append(Altitud)
         self.Graph_Altitud.plot(self.x, self.y_altitud , pen = self.OrangeLines)
         #Temperature
-        self.y_Temperature_Intern.append(TemperatureExt)
+        self.y_Temperature_Intern.append(TemperatureInt)
         self.Graph_Temperatura_Interna.plot(self.x , self.y_Temperature_Intern, pen = self.OrangeLines)
 
         self.y_Temperature_Extern.append(TemperatureExt)
@@ -219,19 +228,11 @@ class MainWindow(uiclass, baseclass):
         #Lines
         self.OrangeLines = (245, 106, 7)
         self.BlueLines = (51 , 175 , 255)
-        #YellowLines = 
         self.Greenlines = (51 , 255 , 79)
+        #YellowLines = 
         #PinkLines =
         #PurpleLines =
 
-
-
-        
-        #self.Graph_Altitud = self.Graph_Altitud.plot(pen=self.OrangeLines)
-        #self.Graph_Giro = self.Graph_Giro.plot(pen=self.OrangeLines)
-
-        #self.Graph_GPS = self.Graph_GPS.plot(pen=OrangeLines)
-        #self.Graph_Presion_Interna = self.Graph_Presion_Interna.plot(pen=self.OrangeLines)
 
     def Add_Items(self):
         ########################## Cilinder
@@ -246,8 +247,10 @@ class MainWindow(uiclass, baseclass):
         connfimr = True
         #connfirm = open view  get value
         if(connfimr):
+            #clear axes data
             self.Graphics_Axes()
             self.UpdateGraphics(0,0,0,0,0)
+            #clear Graphics
             self.Graph_Altitud.clear()
             self.Graph_Temperatura_Interna.clear()
             self.Graph_Temperatura_Externa.clear()
@@ -257,6 +260,7 @@ class MainWindow(uiclass, baseclass):
             self.Graph_Presion_Externa.clear()
             self.Graph_GPS.clear()
             self.Graph_Aceleraciones.clear()
+            #change buttons, and stop mission
             if ( self.missionStatus):
                 self.missionStatus = False
             self.Record_button.setText("Start ")

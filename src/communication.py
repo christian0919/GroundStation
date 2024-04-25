@@ -64,6 +64,7 @@ class communication:
         self.battery = BATT
 
     def Split_Data (self, data):
+        print(data)
         splited = data.split(":")
         
         self.presion_Interna = int(splited[0])

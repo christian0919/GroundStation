@@ -42,18 +42,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0" rowspan="2">
-       <widget class="QGroupBox" name="groupBox_5">
-        <property name="title">
-         <string>Altitud</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="PlotWidget" name="Graph_Altitud" native="true"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QGroupBox" name="groupBox_7">
         <property name="title">
@@ -66,7 +54,7 @@
         </layout>
        </widget>
       </item>
-      <item row="3" column="0" colspan="2">
+      <item row="5" column="0" colspan="2">
        <widget class="QGroupBox" name="groupBox_8">
         <property name="minimumSize">
          <size>
@@ -78,6 +66,12 @@
          <string>Giroscopio</string>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QGroupBox" name="groupBox_16">
            <property name="title">
@@ -110,6 +104,9 @@
              <height>0</height>
             </size>
            </property>
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -125,45 +122,18 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QGroupBox" name="groupBox_6">
+       <widget class="QGroupBox" name="groupBox_5">
         <property name="title">
-         <string>Temperatura </string>
+         <string>Altitud</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QGroupBox" name="groupBox_11">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>200</height>
-            </size>
-           </property>
-           <property name="title">
-            <string>Interna</string>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="PlotWidget" name="Graph_Temperatura_Interna" native="true"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_12">
-           <property name="title">
-            <string>Externa</string>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
-            <item>
-             <widget class="PlotWidget" name="Graph_Temperatura_Externa" native="true"/>
-            </item>
-           </layout>
-          </widget>
+          <widget class="PlotWidget" name="Graph_Altitud" native="true"/>
          </item>
         </layout>
        </widget>
       </item>
-      <item row="1" column="1" rowspan="2">
+      <item row="1" column="1">
        <widget class="QGroupBox" name="groupBox_9">
         <property name="title">
          <string>Presión</string>
@@ -189,6 +159,45 @@
            <layout class="QHBoxLayout" name="horizontalLayout_13">
             <item>
              <widget class="PlotWidget" name="Graph_Presion_Externa" native="true"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="groupBox_6">
+        <property name="title">
+         <string>Temperatura </string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QGroupBox" name="groupBox_11">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="title">
+            <string>Interna</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="PlotWidget" name="Graph_Temperatura_Interna" native="true"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_12">
+           <property name="title">
+            <string>Externa</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="PlotWidget" name="Graph_Temperatura_Externa" native="true"/>
             </item>
            </layout>
           </widget>

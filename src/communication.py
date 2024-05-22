@@ -17,9 +17,12 @@ class communication:
     
     def Get_Cansat_Data(self):
         data = self.serial_port.readline().decode().strip()
+        
         if(data != "" or data !=''):
-            #print("Datos recibidos:", data)
+            #print("Datos recibidos:", data)               
+            
             filtered = data.split("|")
+            
             return str(filtered[1])
         return ""
 
@@ -67,25 +70,25 @@ class communication:
         print(data)
         splited = data.split(":")
         
-        self.presion_Interna = int(splited[0])
-        self.presion_Externa = int(splited[1])
+        self.presion_Interna = float(splited[0])
+        self.presion_Externa = float(splited[1])
         
-        self.altitud = int(splited[2])
+        self.altitud = float(splited[2])
 
-        self.Temperature_Intern = int(splited[3])
-        self.Temperature_Extern = int(splited[4])
+        self.Temperature_Intern = float(splited[3])
+        self.Temperature_Extern = float(splited[4])
 
-        self.latitud = int(splited[5])
-        self.longitud = int(splited[6])
+        self.latitud = float(splited[5])
+        self.longitud = float(splited[6])
 
-        self.giro_x = int(splited[7])
-        self.giro_y = int(splited[8])
-        self.giro_z = int(splited[9])
+        self.giro_x = float(splited[7])
+        self.giro_y = float(splited[8])
+        self.giro_z = float(splited[9])
 
-        self.aceleration_x = int(splited[10])
-        self.aceleration_y = int(splited[11])
-        self.aceleration_z = int(splited[12])
-        self.battery = int(splited[13])
+        self.aceleration_x = float(splited[10])
+        self.aceleration_y = float(splited[11])
+        self.aceleration_z = float(splited[12])
+        self.battery = float(splited[13])
 #Get Data functions
     def get_Presion_I(self):
        return self.presion_Interna

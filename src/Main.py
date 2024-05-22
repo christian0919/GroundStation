@@ -39,10 +39,9 @@ class MainWindow(uiclass, baseclass):
  
         
     def chronometer(self):
-        self.timeUpdater.update_time()
-        hours, minutes, seconds, milliseconds = self.timeUpdater.get_time()
-        time_str = "{:02d}:{:02d}:{:02d}:{:03d}".format(hours, minutes, seconds, milliseconds)
-        self.time_label.setText(time_str)
+        
+
+        self.time_label.setText(self.timeUpdater.get_Time())
 
     def SaveMission(self):
         self.saveData = save()
@@ -93,15 +92,20 @@ class MainWindow(uiclass, baseclass):
     def RealMode(self):
         data = self.com.Get_Cansat_Data()
         if data != "" :
-            self.com.Split_Data(data)
-            self.UpdateGraphics(self.com.get_altitud()       , 
-                                self.com.get_Temperature_I() , self.com.get_Temperature_E() ,
-                                self.com.get_latitud()       ,self.com.get_longitud()       ,
-                                self.com.get_Presion_I()     , self.com.get_Presion_E()     ,
-                                self.com.get_aceleracion_x() ,self.com.get_aceleracion_y()  ,self.com.get_aceleracion_z(),
-                                self.com.get_giro_x()        ,self.com.get_giro_y()         ,self.com.get_giro_z(),
-                                self.com.get_battery()
-                                )
+            
+            if ":" in data:
+                print("carga primaria")
+                self.com.Split_Data(data)
+                self.UpdateGraphics(self.com.get_altitud()       , 
+                                    self.com.get_Temperature_I() , self.com.get_Temperature_E() ,
+                                    self.com.get_latitud()       ,self.com.get_longitud()       ,
+                                    self.com.get_Presion_I()     , self.com.get_Presion_E()     ,
+                                    self.com.get_aceleracion_x() ,self.com.get_aceleracion_y()  ,self.com.get_aceleracion_z(),
+                                    self.com.get_giro_x()        ,self.com.get_giro_y()         ,self.com.get_giro_z(),
+                                    self.com.get_battery()
+                                    )
+            if "^" in data:
+                print("carga secundaria")
 
     def DummyMode(self):
         self.UpdateGraphics(
@@ -120,8 +124,6 @@ class MainWindow(uiclass, baseclass):
                        , Ax = 0, Ay = 0 , Az = 0
                        , Gx = 0, Gy = 0 , Gz = 0 
                        ,Battery = 0 ):
-        self.chronometer()
-
 
         self.x.append(len(self.x))
         
@@ -138,7 +140,7 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Presion_Interna.plot(self.x , self.y_presion_Interna, pen = self.OrangeLines)
         
         self.y_presion_Externa.append(PressionExt)
-        self.Graph_Presion_Externa.plot(self.x , self.y_presion_Externa, pen = self.OrangeLines)
+        #self.Graph_Presion_Externa.plot(self.x , self.y_presion_Externa, pen = self.OrangeLines)
 
 
         self.Graph_GPS.clear()
@@ -166,7 +168,7 @@ class MainWindow(uiclass, baseclass):
         self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_y , pen = self.OrangeLines , name = 'Y')
         self.Graph_Aceleraciones.plot(self.x , self.y_aceleration_z , pen = self.Greenlines  , name = 'Z')
 
-        self.cylinder_widget.update_orientation()
+        #self.cylinder_widget.update_orientation()
         self.cylinder_widget.update_orientation(Gx,Gy,Gz)
 
         
@@ -224,8 +226,8 @@ class MainWindow(uiclass, baseclass):
         self.Graph_GPS.setBackground(None)
         self.Graph_Giro.setBackground(None)
         self.Graph_Presion_Interna.setBackground(None)
-        self.Graph_Presion_Externa.setBackground(None)
-        self.Graph_GPS.setBackground(None)
+        #self.Graph_Presion_Externa.setBackground(None)
+        self.Graph_GPS_2.setBackground(None)
         self.Graph_Aceleraciones.setBackground(None)
         
 
@@ -254,8 +256,8 @@ class MainWindow(uiclass, baseclass):
             #stop timers
             self.timer.stop()
             #self.clock.stop()
-            self.timeUpdater.initialize_Time()
-            self.chronometer()
+            #self.timeUpdater.initialize_Time()
+            #self.chronometer()
             #clear axes data
             self.Graphics_Axes()
             self.UpdateGraphics(0,0,0,0,0)
@@ -266,13 +268,13 @@ class MainWindow(uiclass, baseclass):
             self.Graph_GPS.clear()
             self.Graph_Giro.clear()
             self.Graph_Presion_Interna.clear()
-            self.Graph_Presion_Externa.clear()
-            self.Graph_GPS.clear()
+            #self.Graph_Presion_Externa.clear()
+            self.Graph_GPS_2.clear()
             self.Graph_Aceleraciones.clear()
             #change buttons, and stop mission
             if ( self.missionStatus):
                 self.missionStatus = False
-            self.time_label.setText(" 00:00:00.000 ")
+            self.time_label.setText(" 00:00:00 ")
             self.Record_button.setText("Start ")
             self.Graphics_Axes() 
         #########################

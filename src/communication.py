@@ -19,11 +19,10 @@ class communication:
         data = self.serial_port.readline().decode().strip()
         
         if(data != "" or data !=''):
-            #print("Datos recibidos:", data)               
-            
-            filtered = data.split("|")
-            
-            return str(filtered[1])
+            if "|" in data :
+                print("Datos recibidos:", data)               
+                filtered = data.split("|")
+                return str(filtered[1])
         return ""
 
     def Set_Serial_Port(self,port):
@@ -66,8 +65,9 @@ class communication:
         self.aceleration_z = ACZ
         self.battery = BATT
 
+
     def Split_Data (self, data):
-        print(data)
+
         splited = data.split(":")
         
         self.presion_Interna = float(splited[0])
@@ -89,6 +89,11 @@ class communication:
         self.aceleration_y = float(splited[11])
         self.aceleration_z = float(splited[12])
         self.battery = float(splited[13])
+    def Split_Second_Data(self,data):
+        splited2 = data.split("^")
+        self.second_latitud= float(splited2[0])
+        self.second_longitud = float(splited2[1])
+
 #Get Data functions
     def get_Presion_I(self):
        return self.presion_Interna
@@ -118,3 +123,8 @@ class communication:
         return self.aceleration_z
     def get_battery (self):
         return self.battery
+    def get_second_latitud (self):
+        return self.second_latitud
+    def get_second_longitud (self):
+        return self.second_longitud
+   

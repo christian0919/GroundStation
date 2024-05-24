@@ -17,6 +17,7 @@ class MainWindow(uiclass, baseclass):
         super().__init__()
         self.setupUi(self)
         self.missionStatus = False
+        self.beginDate = ""
         #Times
         self.timeUpdater = TimeManager()
         self.timer = pg.QtCore.QTimer()
@@ -39,22 +40,26 @@ class MainWindow(uiclass, baseclass):
  
         
     def chronometer(self):
-        
+        self.beginDate = self.timeUpdater.get_Time()
 
-        self.time_label.setText(self.timeUpdater.get_Time())
+        self.time_label.setText(self.beginDate)
 
     def SaveMission(self):
         self.saveData = save()
         data = list(zip(self.y_altitud,
-                        self.y_presion_Interna,self.y_presion_Externa,
+                        self.y_presion_Interna,
                         self.y_Temperature_Intern,self.y_Temperature_Extern,
                         self.y_latitud , self.y_longitud ,
                         self.y_giro_x ,self.y_giro_y ,self.y_giro_z,
                         self.y_aceleration_x, self.y_aceleration_y, self.y_aceleration_z
                         ))
+        self.saveData.SetBeginDate( self.beginDate )
+        data2 = list(zip(self.y_latitud2,self.y_longitud2))
         self.saveData.setPath()
-        self.saveData.add_Data(data)
+        self.saveData.add_Data(data,data2)
         self.saveData.save_Mission_Data()
+
+        
 
 
     def StartMission(self):
@@ -62,7 +67,7 @@ class MainWindow(uiclass, baseclass):
            #identifica si hay puestos seriales conectados
            if self.comboPorts.count() == 0:        
                 self.timer.timeout.connect(self.DummyMode)
-                self.timer.start(100)
+                self.timer.start(200)
                 #self.clock.timeout.connect(self.chronometer)
                 #self.clock.start(10)
                 self.missionStatus = not self.missionStatus
@@ -77,7 +82,7 @@ class MainWindow(uiclass, baseclass):
                 self.com.InitializeLora()
                 ### start real mode
                 self.timer.timeout.connect(self.RealMode)
-                self.timer.start(100)
+                self.timer.start(200)
                 self.chronometer()
                 self.missionStatus = not self.missionStatus
                 self.save_button.setEnabled(False)
@@ -104,8 +109,11 @@ class MainWindow(uiclass, baseclass):
                                     self.com.get_giro_x()        ,self.com.get_giro_y()         ,self.com.get_giro_z(),
                                     self.com.get_battery()
                                     )
-            if "^" in data:
+            elif "^" in data:
                 print("carga secundaria")
+                self.com.Split_Second_Data(data)
+                self.UpdateSecondGraphics(self.com.get_second_latitud(),self.com.get_second_longitud())
+
 
     def DummyMode(self):
         self.UpdateGraphics(
@@ -117,6 +125,17 @@ class MainWindow(uiclass, baseclass):
                        , np.random.uniform(0, 30), np.random.uniform(0, 30), np.random.uniform(0, 30) 
                        , np.random.uniform(0,100)) 
 
+    def UpdateSecondGraphics(self,lat,long):
+        self.x2.append(len(self.x2))
+        self.Graph_GPS_2.clear()
+        self.Graph_GPS_2.addLegend()
+        self.y_latitud2.append(lat)
+        self.y_longitud2.append(long)   
+        self.Graph_GPS_2.plot(self.x2 , self.y_latitud  , pen = self.BlueLines   , name = 'Latitud')
+        self.Graph_GPS_2.plot(self.x2 , self.y_longitud , pen = self.OrangeLines , name = 'Longitud')
+
+
+
     def UpdateGraphics(self, Altitud = 0
                        ,TemperatureInt = 0,TemperatureExt = 0 
                        , Lat = 0 , Long  = 0
@@ -124,6 +143,7 @@ class MainWindow(uiclass, baseclass):
                        , Ax = 0, Ay = 0 , Az = 0
                        , Gx = 0, Gy = 0 , Gz = 0 
                        ,Battery = 0 ):
+    
 
         self.x.append(len(self.x))
         
@@ -197,7 +217,7 @@ class MainWindow(uiclass, baseclass):
 
     def Graphics_Axes(self):
         self.x = [] 
-
+        self.x2 = [] 
         self.y_presion_Interna = []
         self.y_presion_Externa = []
 
@@ -216,6 +236,8 @@ class MainWindow(uiclass, baseclass):
         self.y_aceleration_x = []
         self.y_aceleration_y = []
         self.y_aceleration_z = []
+        self.y_latitud2 = []
+        self.y_longitud2 = []
 
 
     def Graphics_Colors(self):

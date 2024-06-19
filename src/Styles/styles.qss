@@ -1,0 +1,24 @@
+* {
+    font-family: "Hurmit Nerd Font", sans-serif;
+    font-size: 10pt;
+}
+QGroupBox {
+    border: 0.5px solid gray;
+    border-radius: 8px;
+    margin-top: 1.5em;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 3px;
+}
+
+PlotWidget {
+    border: none;
+    background: transparent;
+}
+
+QFrame {
+    border: 1px solid transparent;
+}

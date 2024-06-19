@@ -1,7 +1,7 @@
 {
     "LoRa_ADDRESS": 1,
     "LoRa_NETWORKID": 18,
-    "LoRa_BAND": "915000000",
+    "LoRa_BAND": 915000000,
     "LoRa_SPREADING_FACTOR": 7,
     "LoRa_BANDWIDTH": 9,
     "LoRa_CODING_RATE": 4,

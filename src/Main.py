@@ -300,7 +300,13 @@ class MainWindow(uiclass, baseclass):
             self.Record_button.setText("Start ")
             self.Graphics_Axes() 
         #########################
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-app.exec()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+
+    # Cargar la hoja de estilo
+    with open("Styles/styles.qss", "r") as f:
+        app.setStyleSheet(f.read())
+
+    main_window = MainWindow()
+    main_window.show()
+    sys.exit(app.exec())
